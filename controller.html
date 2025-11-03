@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pacman Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    body { 
+      margin: 0; 
+      padding: 20px; 
+      touch-action: manipulation; 
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+    .dpad {
+    display: grid;
+    grid-template-areas: 
+        ". up ."
+        "left . right"
+        ". down .";
+    grid-gap: 0px; /* Minimal gap */
+    margin: 0;
+    padding: 60px;
+    background: #111; /* Dark background for contrast */
+    border-radius: 50px; /* Circular boundary */
+}
+
+.dpad button {
+    width: 85px;
+    height: 85px;
+    border: none;
+    background: #333;
+    color: #ff0;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 0 2px #111, /* Creates overlap illusion */
+        0 3px 0 rgba(0,0,0,0.3);
+    margin: -5px; /* Negative margin makes them overlap */
+    transition: all 0.1s;
+    position: relative; /* For z-index */
+    z-index: 1;
+}
+
+/* Direction-specific positioning */
+#up { 
+    grid-area: up; 
+    margin-bottom: -10px; /* Extra overlap for up */
+}
+#left { 
+    grid-area: left; 
+    margin-right: -10px; /* Extra overlap for left */
+}
+#right { 
+    grid-area: right; 
+    margin-left: -10px; /* Extra overlap for right */
+}
+#down { 
+    grid-area: down; 
+    margin-top: -10px; /* Extra overlap for down */
+}
+
+.dpad button:active {
+    background: #ff0;
+    color: #000;
+    transform: scale(0.95);
+    z-index: 2; /* Pressed button appears above others */
+}
+  </style>
+</head>
+<body>
+  <h1>PACMAN CONTROLLER</h1>
+  <p>Connected to: <span id="status">Disconnected</span></p>
+  
+  <div class="dpad">
+    <button id="up">↑</button>
+    <button id="left">←</button>
+    <button id="right">→</button>
+    <button id="down">↓</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const statusEl = document.getElementById('status');
+    
+    // Connection status
+    socket.on('connect', () => {
+      statusEl.textContent = 'Connected!';
+      statusEl.style.color = 'lime';
+    });
+    
+    socket.on('disconnect', () => {
+      statusEl.textContent = 'Disconnected';
+      statusEl.style.color = 'red';
+    });
+
+    // Button controls
+    const sendDirection = (dir, pressed) => {
+      socket.emit('control', { 
+        direction: dir, 
+        pressed: pressed 
+      });
+    };
+
+    // Touch events for mobile
+    ['up', 'left', 'right', 'down'].forEach(dir => {
+      const btn = document.getElementById(dir);
+      
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        btn.style.background = 'yellow';
+        btn.style.color = 'black';
+        sendDirection(dir, true);
+      });
+      
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        btn.style.background = '#333';
+        btn.style.color = 'white';
+        sendDirection(dir, false);
+      });
+    });
+  </script>
+</body>
+</html>

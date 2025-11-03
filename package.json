@@ -1,9 +1,16 @@
 {
+  "name": "phone-controller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "express": "^4.21.2",
-    "lodash": "^4.17.21",
-    "path": "^0.12.7",
-    "phaser": "^3.90.0",
     "socket.io": "^4.8.1"
   }
 }

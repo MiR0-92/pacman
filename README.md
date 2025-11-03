@@ -1,1 +1,1 @@
-Reverse Pac-Man Game, where Players have to race each other and catch Pac-Man. Dynamic multiplayer will be implemented, and all players will use their phones as controllers. If no players, the game plays itself.
+Reverse Pac-Man Game, where Players have to race each other and catch Pac-Man. Dynamic multiplayer will be implemented, and all players will use their phones as controllers. If no players, the game plays itself. The game reqires node modules and socket IO.
